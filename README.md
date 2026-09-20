@@ -39,7 +39,16 @@ trade is the whole product, so it is worth deciding on purpose.
 The repo is pushed through `git-remote-gcrypt`, so the host only ever stores an encrypted blob.
 That protects you if the repository or the hosting account is stolen. It does **not** hide anything
 from the AI provider: whatever the agent reads in a session is sent to the model. What the provider
-may do with it is set by its data retention terms, not by this kit. Read them for the plan you are on.
+may do with it is set by its data retention terms, not by this kit.
+
+For Claude on a Free, Pro or Max plan, Claude Code included: Anthropic keeps your data for 30 days
+if you do not allow it to be used for model improvement, and for up to 5 years if you do; you
+choose at [claude.ai/settings/data-privacy-controls](https://claude.ai/settings/data-privacy-controls),
+and content flagged for a usage policy violation is kept for up to 2 years either way. Cloud
+sessions follow the same terms. Sources, checked 2026-09-20:
+[Claude Code data usage](https://code.claude.com/docs/en/data-usage) and
+[How long do you store my data?](https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-my-data)
+Turn model improvement off before you put anything personal in the base.
 
 ## Start
 
