@@ -35,6 +35,22 @@ trade is the whole product, so it is worth deciding on purpose.
 | `core/` | [icm-kit-core](https://github.com/jaksm/icm-kit-core), vendored: commit checks, the Claude adapter (phone and cloud access, sync hooks, key revocation), the component library for pages, the graph of your ICM |
 | `.githooks/` | runs the checks before every commit, refuses any push that is not to the encrypted remote |
 
+## What it can do for you
+
+The folders and the three personal records are the base. On top of them, setup offers workflows
+from the [catalog](https://github.com/jaksm/icm-kit-core/blob/main/catalog/index.md); nothing is
+installed until you ask for it.
+
+| Workflow | What you get |
+| --- | --- |
+| `sources` | newsletters, feeds and notices arrive by mail and are sorted by your provider's own rules, which are kept in the ICM |
+| `morning-review` | a routine that files the inbox, leaves unread only what needs you, and writes a dated record with proof it ran |
+| `feed` | a daily page for the phone: what is open in your ICM and what arrived from outside, as rows of cards, with a diary of what you looked at coming back |
+| `expenses` | spending per month as aggregates and a page; the parser for your bank's statements is built for you from a recipe |
+| `import` | an old notes app, another assistant's memory or an old disk, walked through with you five items at a time |
+
+The graph of the ICM itself is part of `core/`; every ICM has it.
+
 ## What encryption does and does not do
 
 The repo is pushed through `git-remote-gcrypt`, so the host only ever stores an encrypted blob.
@@ -51,15 +67,26 @@ sessions follow the same terms. Sources, checked 2026-09-20:
 [How long do you store my data?](https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-my-data)
 Turn model improvement off before you put anything personal in the ICM.
 
+Other providers, and which subscription makes sense: [docs/providers.md](docs/providers.md).
+
 ## Start
+
+The same in one page, with the prompt ready to copy: `site/index.html` (open it in a browser).
 
 Paste the prompt from [setup-prompt.md](setup-prompt.md) into your agent. It asks a few questions
 to learn how technical you are and how you like things explained, checks what is installed, clones
 this template, fills the personal records in a conversation, makes your key and the encrypted
 remote, recommends a recovery USB, sets up phone access, and offers the optional workflows from the
-[catalog](https://github.com/jaksm/icm-kit-core/blob/main/catalog/index.md). It spans several
-sessions and resumes where it stopped: say "continue setup". An ICM that already exists is
-adopted, not rebuilt. Setup by hand:
+[catalog](https://github.com/jaksm/icm-kit-core/blob/main/catalog/index.md), and ends with an audit of the
+whole system that shows you the proof. It spans several sessions and resumes where it stopped: say
+"continue setup". An ICM that already exists is adopted, not rebuilt.
+
+You need a paid Claude plan (Claude Code is not part of the free one), a GitHub account, and git,
+GnuPG and `git-remote-gcrypt`, which setup installs with your permission. Setup has been run on
+macOS; the steps for Windows and Linux are written and marked as not yet verified.
+
+By hand, if you would rather read the steps yourself (`core/skills/setup/steps/`, the key and the
+encrypted remote are steps 05 and 06):
 
 ```bash
 git clone https://github.com/jaksm/icm-kit my-icm && cd my-icm
@@ -73,12 +100,9 @@ Then open the folder in Claude Code and say: read `CLAUDE.md` and run setup.
 `core/` is updated as a whole; everything else is yours and is never touched. Ask the agent to
 update the system. It runs the `core-update` skill: it sees which core files you changed, reads the
 migration guides between your version and the new one, and adapts your customizations instead of
-overwriting them.
-
-## Working on the kit itself
-
-This clone has the push guard on, and the kit's own remote is a plain one. Push it with
-`git -c core.hooksPath=/dev/null push`.
+overwriting them. By hand: `<icm-kit-core>/install.sh . --status` shows your version, the
+available one and the core files you edited; `MIGRATIONS/` in icm-kit-core says what each release
+moved and what you have to do outside `core/`.
 
 ## Lineage
 

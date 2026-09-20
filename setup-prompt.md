@@ -6,6 +6,9 @@ Copy everything in the block into your coding agent, in an empty folder or your 
 I want to set up an ICM: a knowledge base about my own life and work, as markdown files in an
 encrypted git repo, that you will work in from now on. Use icm-kit.
 
+First tell me which agent and subscription you are running as. icm-kit works with Claude Code today;
+if you are something else, say so and stop, because the adapter for you does not exist yet.
+
 Talk to me in the language I answer in. Before anything else, ask me one question at a time:
 what I want this to help with in the next three months, which computer and phone I use, and
 whether I have used git, a terminal and encryption keys before. From my answers, decide how much

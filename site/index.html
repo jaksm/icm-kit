@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>icm-kit: a knowledge base about your life that an agent can work in</title>
+<meta name="description" content="Folders, markdown and git. No vector database, no server. A template and a setup prompt for a personal knowledge base an AI agent can read, write and keep encrypted.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* The subject is a filing system made of plain files, so the page looks like one: cold paper,
+   blue-black ink, archive blue for folders, and one highlighter for the path being read. */
+:root{
+  --paper:#EEF1F4; --sheet:#FBFCFD; --ink:#16202B; --quiet:#566373; --rule:#C5CDD6;
+  --folder:#2F5D8C; --mark:#F2CB4E;
+  --sans:"Hanken Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --measure:64ch;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1.0625rem/1.6 var(--sans)}
+a{color:var(--folder);text-underline-offset:.18em}
+a:hover{color:var(--ink)}
+:focus-visible{outline:3px solid var(--folder);outline-offset:2px;border-radius:2px}
+code{font:400 .9em var(--mono);background:rgba(47,93,140,.09);padding:.08em .3em;border-radius:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+h1,h2{font-weight:800;letter-spacing:-.035em;line-height:1.02;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.6rem,6.4vw,5rem)}
+h2{font-size:clamp(1.9rem,3.6vw,2.9rem);margin-bottom:.6em}
+h3{font-size:1.0625rem;font-weight:800;margin:0 0 .2em;letter-spacing:-.01em}
+p{margin:0 0 1em;max-width:var(--measure)}
+
+header.top{display:flex;justify-content:space-between;align-items:baseline;padding:22px 0;font-size:.95rem}
+header.top b{font-weight:800;letter-spacing:-.02em}
+header.top nav{display:flex;gap:22px}
+header.top nav a{color:var(--ink);text-decoration:none}
+header.top nav a:hover{text-decoration:underline}
+
+.hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:start;padding:40px 0 96px}
+.hero .lede{font-size:1.25rem;line-height:1.5;margin-top:1.4em;max-width:30ch}
+.hero .lede mark{background:linear-gradient(transparent 58%,var(--mark) 58%);color:inherit}
+.cta{display:inline-block;margin-top:1.2em;background:var(--ink);color:var(--sheet);text-decoration:none;
+  font-weight:500;padding:.8em 1.25em;border-radius:6px}
+.cta:hover{background:var(--folder);color:var(--sheet)}
+
+/* The explorer: a tree on the left, the open file on the right. */
+.explorer{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(22,32,43,.04),0 24px 48px -28px rgba(22,32,43,.35)}
+.ask{display:flex;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.ask q{quotes:none;font-weight:500;flex:1 1 220px}
+.ask button{font:500 .9rem var(--sans);background:var(--mark);color:var(--ink);border:0;border-radius:5px;
+  padding:.55em .9em;cursor:pointer}
+.ask button:hover{filter:brightness(.95)}
+.panes{display:grid;grid-template-columns:minmax(200px,5fr) minmax(0,7fr);min-height:400px}
+.tree{margin:0;padding:12px 6px;list-style:none;border-right:1px solid var(--rule);font:400 .84rem/1.3 var(--mono)}
+.tree ul{list-style:none;margin:0;padding-left:16px}
+.tree .dir{display:block;padding:4px 8px;color:var(--folder);font-weight:500}
+.tree button{display:block;width:100%;text-align:left;font:inherit;color:var(--ink);background:none;border:0;
+  padding:4px 8px;border-radius:4px;cursor:pointer}
+.tree button:hover{background:rgba(47,93,140,.08)}
+.tree button[aria-current="true"]{background:var(--mark)}
+.tree button.read{box-shadow:inset 3px 0 0 var(--mark)}
+.file{padding:16px 18px;min-width:0}
+.file .path{font:400 .8rem var(--mono);color:var(--quiet);word-break:break-all}
+.file .layer{display:inline-block;margin:.5em 0 .9em;font-size:.84rem;font-weight:500;color:var(--folder)}
+.file pre{margin:0;font:400 .82rem/1.55 var(--mono);white-space:pre-wrap;word-break:break-word}
+.file pre mark{background:var(--mark);color:inherit;padding:0 .1em}
+.file .why{margin:1em 0 0;padding-top:.8em;border-top:1px dashed var(--rule);font-size:.95rem;color:var(--quiet)}
+
+section{padding:88px 0;border-top:1px solid var(--rule)}
+.two{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:56px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.pair ul{margin:0;padding-left:1.1em}
+.pair li{margin-bottom:.55em}
+dl.uses{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 40px}
+dl.uses dt{font-weight:800;letter-spacing:-.01em}
+dl.uses dd{margin:.2em 0 0;color:var(--quiet)}
+dl.uses dd code{color:var(--ink)}
+.limits{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--sheet)}
+.limits > div{padding:24px 26px}
+.limits > div + div{border-left:1px solid var(--rule);background:#F6EFD6}
+/* A comparison of providers reads as one block per provider, not as a wide grid: the cells hold
+   sentences and links, and a four column table made them a column of single words. */
+.rows{margin:0 0 1.2em}
+.rows table,.rows tbody,.rows tr,.rows th,.rows td{display:block}
+.rows thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.rows tr{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.rows th{text-align:left;font-weight:800;font-size:1.0625rem;letter-spacing:-.01em;margin-bottom:.5em}
+.rows td{display:grid;grid-template-columns:11em minmax(0,1fr);gap:14px;padding:.45em 0;border-top:1px solid var(--rule);font-size:.97rem}
+.rows td::before{content:attr(data-label);color:var(--quiet)}
+.rows td a{word-break:break-word}
+.opinion{border-left:4px solid var(--mark);padding:2px 0 2px 18px;margin-top:1.6em}
+.opinion p:last-child{margin-bottom:0}
+
+.prompt{background:var(--ink);color:#E6ECF2;border-radius:10px;overflow:hidden}
+.prompt .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px 10px 18px;
+  border-bottom:1px solid rgba(230,236,242,.16);font-size:.9rem}
+.prompt button{font:500 .9rem var(--sans);background:var(--mark);color:var(--ink);border:0;border-radius:5px;padding:.5em 1em;cursor:pointer}
+.prompt pre{margin:0;padding:18px;font:400 .84rem/1.6 var(--mono);white-space:pre-wrap;max-height:22em;overflow:auto}
+ol.then{padding-left:1.2em;max-width:var(--measure)}
+ol.then li{margin-bottom:.5em}
+footer{padding:40px 0 64px;border-top:1px solid var(--rule);color:var(--quiet);font-size:.95rem}
+
+@media (max-width:900px){
+  .hero,.two{grid-template-columns:1fr;gap:32px}
+  .hero{padding-bottom:64px}
+  section{padding:60px 0}
+}
+@media (max-width:620px){
+  .wrap{padding:0 16px}
+  .panes,.pair,.limits,dl.uses{grid-template-columns:1fr}
+  .rows td{grid-template-columns:1fr;gap:2px}
+  .tree{border-right:0;border-bottom:1px solid var(--rule)}
+  .limits > div + div{border-left:0;border-top:1px solid var(--rule)}
+  header.top nav a:not(.keep){display:none}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <b>icm-kit</b>
+  <nav aria-label="On this page">
+    <a href="#who">Who it is for</a><a href="#limits">Encryption</a><a href="#plans">Subscriptions</a>
+    <a class="keep" href="#start">Start</a>
+  </nav>
+</header>
+
+<main>
+<div class="hero">
+  <div>
+    <h1>A knowledge base about your life that an agent can work in.</h1>
+    <p class="lede">It is <mark>folders, markdown and git</mark>. No vector database, no server, no app to keep running. You can read every file, and so can the agent.</p>
+    <a class="cta" href="#start">Copy the setup prompt</a>
+  </div>
+
+  <div class="explorer" aria-label="How an agent finds an answer in an ICM">
+    <div class="ask">
+      <q>When do I have to order the greenhouse panels?</q>
+      <button type="button" id="follow">Follow the agent</button>
+    </div>
+    <div class="panes">
+      <ul class="tree" id="tree"></ul>
+      <div class="file" id="file" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="two">
+    <h2>The folder structure is the search engine.</h2>
+    <div>
+      <p>An agent does not need an index to find one fact among a few hundred files. It needs a map. The file at the top says which area a question belongs to. The file at the top of that area says which record holds the answer. Then it reads the record. Three small reads, and every one of them is a file you can open yourself.</p>
+      <p>When it goes wrong, you can see why. If the agent looked in the wrong place, the routing table that sent it there is two lines of markdown, and you fix it by editing them. This is built for one person's few hundred to few thousand records, not for a company's document store. <code>git log</code> says when a fact changed and why.</p>
+    </div>
+  </div>
+</section>
+
+<section id="who">
+  <div class="two">
+    <h2>Who it is for</h2>
+    <div class="pair">
+      <div>
+        <h3>Yes, if all three hold</h3>
+        <ul>
+          <li>You already use Claude and would rather not explain your situation again in every new conversation. Claude Code is the only agent supported today.</li>
+          <li>You want one place that knows your projects, your numbers, your decisions and the reasons behind them.</li>
+          <li>You can clone, commit and push, and you accept owning an encryption key you must not lose. The agent does the typing; you understand what it is doing.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>No, if</h3>
+        <ul>
+          <li>You want an app with a login and a sync button.</li>
+          <li>You are not willing to put personal material in one place. An ICM that knows you well personalizes better, at the price of concentrating private data. That trade is the product, so decide it on purpose.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="uses">
+  <div class="two">
+    <h2>What it can do</h2>
+    <dl class="uses">
+      <div><dt>Stop re-explaining yourself</dt><dd>Areas for whatever your life has: a business, a house, a body, a trip. Each one routes to its records.</dd></div>
+      <div><dt>A morning that starts sorted</dt><dd><code>morning-review</code> files the inbox, leaves unread only what needs you, and writes a dated record with proof it ran.</dd></div>
+      <div><dt>A feed of your own open things</dt><dd><code>feed</code> builds a page for the phone: what is open in your ICM and what arrived from outside, and it reports back what you looked at, so tomorrow's page can follow it.</dd></div>
+      <div><dt>Where the money goes</dt><dd><code>expenses</code> shows spending per month as aggregates. The parser for your bank is built for you from a recipe, because only yours fits.</dd></div>
+      <div><dt>Bring the old system along</dt><dd><code>import</code> walks an old notes app or another assistant's memory with you, five items at a time, and keeps what is still alive.</dd></div>
+      <div><dt>See the whole thing</dt><dd>A graph of every record and link, rebuilt on each commit, so gaps and orphans show.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="limits">
+  <div class="two">
+    <h2>What encryption does, and what it does not</h2>
+    <div>
+      <div class="limits">
+        <div>
+          <h3>It does</h3>
+          <p>The repo is pushed through <code>git-remote-gcrypt</code>, so the host only stores an encrypted blob. If the repository or the hosting account is stolen, the thief has nothing to read.</p>
+        </div>
+        <div>
+          <h3>It does not</h3>
+          <p>It hides nothing from the AI provider. Whatever the agent reads in a session is sent to the model. What the provider keeps, and for how long, is set by its terms, not by this kit.</p>
+          <p>On your own computer the files are plain text. A stolen laptop is a job for the disk encryption of your operating system.</p>
+        </div>
+      </div>
+      <p style="margin-top:1.4em">So read the terms once and choose the setting on purpose. Setup opens it with you before anything personal is written.</p>
+      <div class="rows"><table><thead><tr><th>Provider</th><th>Used to train models</th><th>What is kept, and how long</th><th>The setting</th></tr></thead><tbody><tr><th scope="row">Anthropic (Claude, Claude Code, cloud sessions)</th><td data-label="Used to train models"><span>only if you allow it; you are asked to choose</span></td><td data-label="What is kept, and how long"><span>30 days if you do not allow model improvement, up to 5 years if you do; content flagged for a policy violation up to 2 years. <a href="https://code.claude.com/docs/en/data-usage">Claude Code data usage</a>, <a href="https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-my-data">How long do you store my data?</a></span></td><td data-label="The setting"><span><a href="https://claude.ai/settings/data-privacy-controls">claude.ai/settings/data-privacy-controls</a></span></td></tr><tr><th scope="row">OpenAI (ChatGPT, Codex on a personal plan)</th><td data-label="Used to train models"><span>yes by default, with an opt-out that also covers Codex</span></td><td data-label="What is kept, and how long"><span>chats stay until you delete them; a deleted chat is scheduled for permanent deletion within 30 days, with exceptions. <a href="https://help.openai.com/en/articles/8983778-chat-and-file-retention-policies-in-chatgpt">Chat and file retention</a></span></td><td data-label="The setting"><span>Settings, Data Controls, &quot;Improve the model for everyone&quot;: <a href="https://help.openai.com/en/articles/7730893-data-controls-faq">Data Controls FAQ</a></span></td></tr><tr><th scope="row">Google Antigravity (individual)</th><td data-label="Used to train models"><span>yes by default, and people at Google may review interactions</span></td><td data-label="What is kept, and how long"><span>no retention period is stated in the terms or the FAQ. <a href="https://antigravity.google/terms">Terms</a></span></td><td data-label="The setting"><span>an opt-out in the Settings panel: <a href="https://antigravity.google/docs/faq">FAQ</a></span></td></tr><tr><th scope="row">Ollama, run locally</th><td data-label="Used to train models"><span>no</span></td><td data-label="What is kept, and how long"><span>nothing leaves your computer: &quot;We don&#x27;t see your prompts or data when you run locally.&quot; Its cloud models are a different product with different terms. <a href="https://docs.ollama.com/faq">FAQ</a></span></td><td data-label="The setting"><span>none needed</span></td></tr></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section id="plans">
+  <div class="two">
+    <h2>Which subscription</h2>
+    <div>
+      <p>icm-kit is built to be provider agnostic: everything specific to a harness lives in one adapter folder. Today one adapter exists. Prices change, so follow the links for them.</p>
+      <div class="rows"><table><thead><tr><th>Provider</th><th>Works with icm-kit today</th><th>Which plan</th><th>Prices</th></tr></thead><tbody><tr><th scope="row">Claude</th><td data-label="Works with icm-kit today"><span><strong>yes</strong>: Claude Code on your computer, cloud sessions and the mobile app</span></td><td data-label="Which plan"><span>the entry paid plan is enough to start; it includes Claude Code and cloud sessions, which the free plan does not. Move up when you hit the limits, not before</span></td><td data-label="Prices"><span><a href="https://claude.com/pricing">claude.com/pricing</a></span></td></tr><tr><th scope="row">ChatGPT with Codex</th><td data-label="Works with icm-kit today"><span>adapter planned</span></td><td data-label="Which plan"><span>Codex is included in the personal plans, with limits that grow by plan</span></td><td data-label="Prices"><span><a href="https://chatgpt.com/pricing">chatgpt.com/pricing</a></span></td></tr><tr><th scope="row">Google Antigravity</th><td data-label="Works with icm-kit today"><span>adapter planned</span></td><td data-label="Which plan"><span>there is a free individual tier; the Google AI plans raise the limits</span></td><td data-label="Prices"><span><a href="https://antigravity.google/pricing">antigravity.google/pricing</a></span></td></tr><tr><th scope="row">Ollama and other local models</th><td data-label="Works with icm-kit today"><span>untested</span></td><td data-label="Which plan"><span>free software; the cost is the computer. It is the one setup where the provider question goes away</span></td><td data-label="Prices"><span><a href="https://ollama.com">ollama.com</a></span></td></tr></tbody></table></div>
+      <div class="opinion">
+        <h3>The maintainer's opinion, not a measurement</h3>
+        <p><strong>Claude</strong>, entry paid plan: the best place to start, and excellent for people who are not technical. To my eye it has the smartest models available today, and an ICM lives on judgement more than on volume.</p>
+<p><strong>Codex</strong>, entry paid plan: more usage for the same money, and in my experience drastically less clever.</p>
+<p><strong>Antigravity</strong>, a mid-priced plan: a lot more usage and a very fast model, and the weakest judgement of the three.</p>
+<p><strong>Ollama and local models</strong>: I have not tested them with the kit. They are worth watching, because they solve the privacy question outright.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="start">
+  <div class="two">
+    <h2>Start</h2>
+    <div>
+      <h3>What you need</h3>
+      <p>A paid Claude plan, because Claude Code is not part of the free one. A GitHub account for the private repo; GitHub only ever sees an encrypted blob, and access from the phone goes through it. git, GnuPG and <code>git-remote-gcrypt</code>, which setup installs with your permission, one at a time. Setup has been run on macOS; the steps for Windows and Linux are written and marked as not yet verified.</p>
+      <p>The key is yours alone. If you lose it, the encrypted copy cannot be opened by anyone, which is why setup recommends a recovery USB before anything else personal is written.</p>
+      <p>Paste this into Claude Code, in an empty folder or your home folder.</p>
+      <div class="prompt">
+        <div class="bar"><span id="copied" role="status">setup-prompt.md</span><button type="button" id="copy">Copy</button></div>
+        <pre id="prompt" tabindex="0">I want to set up an ICM: a knowledge base about my own life and work, as markdown files in an
+encrypted git repo, that you will work in from now on. Use icm-kit.
+
+First tell me which agent and subscription you are running as. icm-kit works with Claude Code today;
+if you are something else, say so and stop, because the adapter for you does not exist yet.
+
+Talk to me in the language I answer in. Before anything else, ask me one question at a time:
+what I want this to help with in the next three months, which computer and phone I use, and
+whether I have used git, a terminal and encryption keys before. From my answers, decide how much
+to explain, and ask me how I like things explained.
+
+Then:
+1. Check that git is installed. If it is not, tell me how to install it and wait.
+2. Ask where the ICM should live, and clone https://github.com/jaksm/icm-kit there.
+3. Open core/skills/setup/SKILL.md in that folder and follow it from step 01. It keeps its state in
+   _config/setup.json, so if we stop, I can come back and say &quot;continue setup&quot;.
+
+Rules for the whole setup: never ask me for a passphrase or a password in this conversation and
+never write one to a file; I type those myself when a window asks. Install nothing and create
+nothing outside my computer without asking me first, one thing at a time. When a step is done,
+show me the proof, not just the claim.</pre>
+      </div>
+      <p style="margin-top:1.4em">What happens next:</p>
+      <ol class="then">
+        <li>It asks what you want help with and how technical you are, then explains at that level, in your language.</li>
+        <li>It checks what is installed, clones the template, and fills the three personal records in a conversation.</li>
+        <li>It makes your key and the encrypted remote, recommends a recovery USB, and sets up access from your phone.</li>
+        <li>It offers the workflows above. Nothing is installed unless you ask.</li>
+        <li>It ends with an audit of the whole system and shows you the proof. Setup spans several sessions; say "continue setup" to resume.</li>
+      </ol>
+      <p>The template: <a href="https://github.com/jaksm/icm-kit">icm-kit</a>. What it vendors: <a href="https://github.com/jaksm/icm-kit-core">icm-kit-core</a>. Components for pages: <a href="https://github.com/jaksm/icm-ui">icm-ui</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="lineage">
+  <div class="two">
+    <h2>Where this comes from</h2>
+    <div>
+      <p>ICM is the <a href="https://github.com/RinDig/Interpretable-Context-Methodology">Interpretable Context Methodology</a> by Jake Van Clief: the folder structure is the orchestration layer, and one agent reading the right files at the right moment does what would otherwise take a framework. The vocabulary here is his: layers 0 to 4, canonical source, contract, checkpoint, <code>_config/</code>.</p>
+      <p>His workspace moves one piece of work through numbered stages. An ICM built from this kit holds one person's knowledge in areas that have no order, on the same five layers, and adds what a personal base needs: encryption, access from a phone, and updates that do not touch your data.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>MIT. The kit sends nothing anywhere. This page loads its two typefaces from Google Fonts and nothing else.</footer>
+</div>
+
+<script>
+// A tiny ICM. `layer` is the layer of the Interpretable Context Methodology the file sits on.
+const FILES = {
+  'CLAUDE.md': {layer: 'Layer 0: where am I', why: 'The router. One row matches the question and names the area. Nothing else in this file is read.',
+    text: '# Routing\n\n| When they ask about | Go to |\n| --- | --- |\n| money, budget, spending | domains/money/CONTEXT.md |\n| [[the greenhouse, beds, what to plant]] | [[domains/garden/CONTEXT.md]] |\n| how the ICM works | domains/system/CONTEXT.md |'},
+  'who-am-i.md': {layer: 'Read first, in every conversation', why: 'Short on purpose. It carries who you are and one paragraph per area, so the agent starts oriented.',
+    text: '# Who I am\n\nWork, family, character, goals with a date,\nand one paragraph on the state of each area.'},
+  'domains/garden/CONTEXT.md': {layer: 'Layer 1: where do I go', why: 'A CONTEXT.md routes and never holds content, so it stays under 80 lines and is cheap to read.',
+    text: '# Garden\n\n| Ask about | Go to |\n| --- | --- |\n| [[the greenhouse plan, what is open]] | [[output/greenhouse-plan.md]] |\n| what grew where, by year | data/beds.csv |'},
+  'domains/garden/output/greenhouse-plan.md': {layer: 'Layer 4: what am I working with', why: 'The record. Your decision, in your words, with frontmatter that says how far to trust it. This is the answer.',
+    text: '---\ntype: Decision\nstatus: active\ntrust_tier: authoritative\n---\n\n# Greenhouse plan\n\nOpen: 6 mm or 10 mm panels.\n[[Open: the order must go out before 15 October]]\n[[to build before frost.]]\nDone: foundation poured in August.'},
+  'domains/garden/data/beds.csv': {layer: 'Layer 4: tables that are appended to', why: 'Data stays a table. It is appended to, not retold in prose.',
+    text: 'year,bed,crop,yield_kg\n2025,A,tomato,31\n2025,B,garlic,6\n2026,A,beans,12'},
+  'skills/CONTEXT.md': {layer: 'Layer 1: which procedure', why: 'Areas hold knowledge, skills hold steps. When you ask for something to be done, the agent starts here.',
+    text: '# Skills\n\n| When they ask to | Skill |\n| --- | --- |\n| plan the season | skills/plan-season/ |'},
+  'core/': {layer: 'Vendored, updated as a whole', why: 'Checks that run before every commit, the adapter for your agent, setup, the workflows you chose. Your data never lives here, so an update never touches it.',
+    text: 'scripts/     leak, link and style checks\nadapters/    phone and cloud access, key revocation\nskills/      setup, core-update\nworkflows/   only the ones you asked for'}
+};
+const ORDER = ['CLAUDE.md', 'who-am-i.md', 'domains/garden/CONTEXT.md', 'domains/garden/output/greenhouse-plan.md', 'domains/garden/data/beds.csv', 'skills/CONTEXT.md', 'core/'];
+const PATH = ['CLAUDE.md', 'domains/garden/CONTEXT.md', 'domains/garden/output/greenhouse-plan.md'];
+const esc = s => s.replace(/[&<>]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c]));
+const tree = document.getElementById('tree'), file = document.getElementById('file');
+
+// Build the nested list from the paths, so the tree cannot disagree with FILES.
+const root = {};
+for (const p of ORDER) p.replace(/\/$/, '').split('/').reduce((n, part, i, a) => n[part] = n[part] || (i === a.length - 1 ? p : {}), root);
+const render = node => Object.entries(node).map(([name, v]) => typeof v === 'string'
+  ? '<li><button type="button" data-path="' + v + '">' + name + (v.endsWith('/') ? '/' : '') + '</button></li>'
+  : '<li><span class="dir">' + name + '/</span><ul>' + render(v) + '</ul></li>').join('');
+tree.innerHTML = render(root);
+
+function open(path, marked) {
+  const f = FILES[path];
+  for (const b of tree.querySelectorAll('button')) b.setAttribute('aria-current', b.dataset.path === path);
+  const text = esc(f.text).replace(/\[\[(.*?)\]\]/g, marked ? '<mark>$1</mark>' : '$1');
+  file.innerHTML = '<div class="path">' + path + '</div><div class="layer">' + f.layer + '</div><pre>' + text + '</pre><p class="why">' + f.why + '</p>';
+}
+tree.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { stop(); open(b.dataset.path, PATH.includes(b.dataset.path)); } });
+
+let timer = 0;
+function stop() { clearTimeout(timer); }
+document.getElementById('follow').addEventListener('click', () => {
+  stop();
+  for (const b of tree.querySelectorAll('button')) b.classList.remove('read');
+  const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  (function step(i) {
+    if (i >= PATH.length) return;
+    open(PATH[i], true);
+    tree.querySelector('[data-path="' + PATH[i] + '"]').classList.add('read');
+    timer = setTimeout(step, still ? 0 : 1900, i + 1);
+  })(0);
+});
+open('CLAUDE.md', true);
+
+document.getElementById('copy').addEventListener('click', async () => {
+  const pre = document.getElementById('prompt'), note = document.getElementById('copied');
+  try {
+    await navigator.clipboard.writeText(pre.textContent);
+    note.textContent = 'Copied. Paste it into Claude Code.';
+  } catch (e) {
+    // no clipboard permission (file:// in some browsers): select it, so one keystroke copies
+    const r = document.createRange(); r.selectNodeContents(pre);
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    note.textContent = 'Selected. Press Ctrl or Cmd + C.';
+  }
+});
+</script>
+</html>
