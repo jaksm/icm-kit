@@ -31,7 +31,7 @@ trade is the whole product, so it is worth deciding on purpose.
 | `domains/` | areas of knowledge. `system/` describes the ICM itself; `_example/` is the shape of every other area |
 | `skills/` | your own procedures, plus the audit rule for skills you download |
 | `_config/` | the few things `core/` needs to know about your ICM |
-| `core/` | [icm-kit-core](https://github.com/jaksm/icm-kit-core), vendored: commit checks, the Claude adapter (phone and cloud access, sync hooks, key revocation), the component library for pages, the graph of your base |
+| `core/` | [icm-kit-core](https://github.com/jaksm/icm-kit-core), vendored: commit checks, the Claude adapter (phone and cloud access, sync hooks, key revocation), the component library for pages, the graph of your ICM |
 | `.githooks/` | runs the checks before every commit, refuses any push that is not to the encrypted remote |
 
 ## What encryption does and does not do
