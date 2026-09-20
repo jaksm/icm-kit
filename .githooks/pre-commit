@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Checks before every commit. Enable once per clone: git config core.hooksPath .githooks
+# The checks are generic and live in core/; what is specific to this repo is set here as environment.
+set -u
+cd "$(git rev-parse --show-toplevel)"
+
+LINK_CHECK_SKIP=".git core/ui/vendor" ./core/scripts/link-check.sh || exit 1
+STYLE_CHECK_SKIP="core/ .claude/skills/" ./core/scripts/style-check.sh || exit 1
+./core/scripts/leak-check.sh || exit 1
+
+# The graph page is rebuilt when a record changes. It never blocks a commit, and it is not committed:
+# it holds the whole text of the repo.
+if git diff --cached --name-only | grep -qE '\.md$'; then
+  python3 core/workflows/graph/scripts/build-graph-page.py >/dev/null || echo "pre-commit: graph page not built, commit goes on"
+fi
+exit 0

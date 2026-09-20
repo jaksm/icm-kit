@@ -1,0 +1,5 @@
+artifacts/graph.html
+__pycache__/
+*.local
+.env
+.DS_Store
