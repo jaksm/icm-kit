@@ -1,6 +1,6 @@
 # icm-kit
 
-A knowledge base about your own life and work that an AI agent can actually work in.
+An ICM: a knowledge base about your own life and work that an AI agent can actually work in.
 
 It is a folder of markdown files in a git repo. That is the whole trick. There is no vector
 database, no embedding pipeline, no server, no app to keep running. The agent finds things the way
@@ -19,7 +19,7 @@ Yes, if all three hold:
   must not lose. The agent does the typing; you need to understand what it is doing.
 
 No, if you want an app with a login, or you are not willing to put personal material in one place.
-A base that knows you well personalizes better, at the price of concentrating private data. That
+An ICM that knows you well personalizes better, at the price of concentrating private data. That
 trade is the whole product, so it is worth deciding on purpose.
 
 ## What is in the box
@@ -27,10 +27,10 @@ trade is the whole product, so it is worth deciding on purpose.
 | Path | What it is |
 | --- | --- |
 | `CLAUDE.md` | the router: the map, routing tables, trigger words, and the rules the agent works by |
-| `who-am-i.md`, `how-we-talk.md`, `memory.md` | the three personal records, empty, each with a note telling the agent what to collect and how to ask |
-| `domains/` | areas of knowledge. `system/` describes the base itself; `_example/` is the shape of every other area |
+| `who-am-i.md`, `how-we-talk.md`, `memory.md` | the three personal records, empty, each with a setup note telling the agent what to collect and how to ask |
+| `domains/` | areas of knowledge. `system/` describes the ICM itself; `_example/` is the shape of every other area |
 | `skills/` | your own procedures, plus the audit rule for skills you download |
-| `config/` | the few things `core/` needs to know about your repo |
+| `_config/` | the few things `core/` needs to know about your ICM |
 | `core/` | [icm-kit-core](https://github.com/jaksm/icm-kit-core), vendored: commit checks, the Claude adapter (phone and cloud access, sync hooks, key revocation), the component library for pages, the graph of your base |
 | `.githooks/` | runs the checks before every commit, refuses any push that is not to the encrypted remote |
 
@@ -48,7 +48,7 @@ and content flagged for a usage policy violation is kept for up to 2 years eithe
 sessions follow the same terms. Sources, checked 2026-09-20:
 [Claude Code data usage](https://code.claude.com/docs/en/data-usage) and
 [How long do you store my data?](https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-my-data)
-Turn model improvement off before you put anything personal in the base.
+Turn model improvement off before you put anything personal in the ICM.
 
 ## Start
 
@@ -62,7 +62,7 @@ git clone https://github.com/jaksm/icm-kit my-icm && cd my-icm
 rm -rf .git && git init -b main && git config core.hooksPath .githooks
 ```
 
-Then open the folder in Claude Code and say: read `CLAUDE.md` and onboard me.
+Then open the folder in Claude Code and say: read `CLAUDE.md` and run setup.
 
 ## Updates
 
@@ -82,7 +82,8 @@ ICM is the Interpretable Context Methodology by Jake Van Clief: the folder struc
 orchestration layer, and one agent reading the right files at the right moment does what would
 otherwise take a framework.
 [RinDig/Interpretable-Context-Methodology](https://github.com/RinDig/Interpretable-Context-Methodology), MIT.
-His workspaces move a piece of work through stages. icm-kit applies the same layers to a base that
-holds one person's knowledge and keeps growing.
+The vocabulary here is his: layers 0 to 4, canonical source, contract, checkpoint, `_config/`.
+His workspace moves one piece of work through numbered stages. An ICM built from this kit holds
+one person's knowledge in areas that have no order, on the same five layers.
 
 MIT.

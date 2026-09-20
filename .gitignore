@@ -1,4 +1,4 @@
-artifacts/graph.html
+pages/graph.html
 __pycache__/
 *.local
 .env

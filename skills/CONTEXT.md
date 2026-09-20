@@ -1,7 +1,9 @@
 # Procedures
 
-What is done when the owner asks for something, in what order, what is checked. A skill holds
-steps; the knowledge lives in the area it points to. A skill may carry `scripts/` (volume and
+What is done when the owner asks for something, in what order, what is checked. A `SKILL.md` is a
+contract with three sections: **Inputs** (which files to load), **Process** (the steps, with a
+**checkpoint** wherever the owner must decide) and **Outputs** (what is written, and where). The
+knowledge lives in the area the skill points to. A skill may carry `scripts/` (volume and
 exactness) and `references/` (what must be known before changing the script); `SKILL.md` holds the
 judgement. Results go to the area's `output/`, skills have no outputs of their own.
 

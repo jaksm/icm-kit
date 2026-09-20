@@ -9,4 +9,4 @@ tags: [system]
 
 # Open tasks
 
-<!-- onboarding: start with what onboarding left unfinished. One row per task: what, who, what it waits for. A finished task is deleted, not ticked. Delete this comment. -->
+<!-- setup: start with what setup left unfinished. One row per task: what, who, what it waits for. A finished task is deleted, not ticked. Delete this comment. -->

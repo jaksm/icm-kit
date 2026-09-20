@@ -9,10 +9,10 @@ tags: [personal, tone, language, rules, privacy]
 
 # How we talk
 
-<!-- onboarding: this page decides how every later answer sounds, so take it from evidence.
+<!-- setup: this page decides how every later answer sounds, so take it from evidence.
 - Language and register: answer in the language they write in. Note how they write (short
   commands, voice notes, mixed languages) and mirror it.
-- How technical they are: from the onboarding questions. Record it as one line here; it sets how
+- How technical they are: from the setup questionnaire. Record it as one line here; it sets how
   much every later step is explained.
 - Length: ask whether they want the conclusion first and detail on request, or the reasoning.
 - What they never want: unsolicited advice, summaries of what they just said, praise, emoji.
@@ -23,4 +23,4 @@ Delete this comment. -->
 
 ## Words that trigger something
 
-<!-- onboarding: copy the table from CLAUDE.md in the owner's language, with one example each. -->
+<!-- setup: copy the table from CLAUDE.md in the owner's language, with one example each. -->

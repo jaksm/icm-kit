@@ -9,4 +9,4 @@ tags: [system]
 
 # Sources
 
-<!-- onboarding: add sources one at a time and let each run for a few days before the next. A sender that looks like noise may be a deliberate signal: ask before unsubscribing. Delete this comment. -->
+<!-- setup: add sources one at a time and let each run for a few days before the next. A sender that looks like noise may be a deliberate signal: ask before unsubscribing. Delete this comment. -->

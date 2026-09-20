@@ -1,6 +1,7 @@
-# config
+# _config
 
-What `core/` reads about this repo. `core/` is replaced whole on update; this folder never is.
+Configure the factory, not the product: what `core/` reads about this ICM. `core/` is replaced
+whole on update; this folder never is.
 
 | File | Read by | Holds |
 | --- | --- | --- |

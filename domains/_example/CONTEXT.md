@@ -1,6 +1,6 @@
 # <Area name>
 
-<!-- onboarding: copy this folder once per area the owner names (health, money, a side project, a
+<!-- setup: copy this folder once per area the owner names (health, money, a side project, a
 hobby), rename it in lowercase with dashes, and delete `_example` when the first real area exists.
 An area earns a folder when it has at least three records or one table. -->
 
