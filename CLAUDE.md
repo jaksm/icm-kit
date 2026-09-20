@@ -11,11 +11,12 @@ and carry tone, language, limits and the state of every area.
 
 ## Before you answer, add, research or decide: search the ICM
 
-A duplicate record means two versions of one fact that drift apart.
+A duplicate record means two versions of one fact that drift apart. (Always give `rg` a path: without one, in a shell
+that has no terminal, it waits on stdin until it times out.)
 
 ```bash
-rg -il "term" --glob '*.md'                 # which records mention it
-rg -i "^description:.*term" --glob '*.md'   # by frontmatter description only
+rg -il "term" --glob '*.md' .                 # which records mention it
+rg -i "^description:.*term" --glob '*.md' .   # by frontmatter description only
 ```
 
 Order: the routing table below, then that area's `CONTEXT.md`, then `rg`. If a record exists it is
