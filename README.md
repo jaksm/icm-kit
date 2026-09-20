@@ -31,6 +31,7 @@ trade is the whole product, so it is worth deciding on purpose.
 | `domains/` | areas of knowledge. `system/` describes the ICM itself; `_example/` is the shape of every other area |
 | `skills/` | your own procedures, plus the audit rule for skills you download |
 | `_config/` | the few things `core/` needs to know about your ICM |
+| `setup-prompt.md` | what you paste into your agent to start |
 | `core/` | [icm-kit-core](https://github.com/jaksm/icm-kit-core), vendored: commit checks, the Claude adapter (phone and cloud access, sync hooks, key revocation), the component library for pages, the graph of your ICM |
 | `.githooks/` | runs the checks before every commit, refuses any push that is not to the encrypted remote |
 
@@ -52,10 +53,13 @@ Turn model improvement off before you put anything personal in the ICM.
 
 ## Start
 
-Paste the setup prompt from the site into your agent. It asks a few questions to learn how
-technical you are, checks what is installed, clones this template, fills the personal records in a
-conversation, makes your key, and walks you through cloud access, sources, reminders and your
-first routines. Setup by hand:
+Paste the prompt from [setup-prompt.md](setup-prompt.md) into your agent. It asks a few questions
+to learn how technical you are and how you like things explained, checks what is installed, clones
+this template, fills the personal records in a conversation, makes your key and the encrypted
+remote, recommends a recovery USB, sets up phone access, and offers the optional workflows from the
+[catalog](https://github.com/jaksm/icm-kit-core/blob/main/catalog/index.md). It spans several
+sessions and resumes where it stopped: say "continue setup". An ICM that already exists is
+adopted, not rebuilt. Setup by hand:
 
 ```bash
 git clone https://github.com/jaksm/icm-kit my-icm && cd my-icm

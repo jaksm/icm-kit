@@ -61,7 +61,9 @@ rather than **known**, go to the skill first; the result goes to the area's `out
 
 | When they ask | Skill |
 | --- | --- |
+| run setup, continue setup, adopt an existing ICM | `core/skills/setup/` |
 | update the system, a migration guide | `core/skills/core-update/` |
+| a recovery USB, a new computer | `core/backup/` |
 | phone and cloud access, keys, hooks, revocation | `core/adapters/claude/` |
 
 ## Words that trigger something
