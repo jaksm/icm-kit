@@ -4,7 +4,7 @@
 set -u
 cd "$(git rev-parse --show-toplevel)"
 
-LINK_CHECK_SKIP=".git core/ui/vendor" ./core/scripts/link-check.sh || exit 1
+LINK_CHECK_SKIP=".git core" ./core/scripts/link-check.sh || exit 1
 STYLE_CHECK_SKIP="core/ .claude/skills/" ./core/scripts/style-check.sh || exit 1
 ./core/scripts/leak-check.sh || exit 1
 
