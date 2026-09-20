@@ -1,4 +1,5 @@
-pages/graph.html
+# Built pages carry the text of the ICM, and some carry money. Sources live with the workflow that builds them.
+pages/*.html
 __pycache__/
 *.local
 .env

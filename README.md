@@ -90,7 +90,7 @@ encrypted remote are steps 05 and 06):
 
 ```bash
 git clone https://github.com/jaksm/icm-kit my-icm && cd my-icm
-rm -rf .git && git init -b main && git config core.hooksPath .githooks
+rm -rf .git site docs CONTRIBUTING.md && git init -b main && git config core.hooksPath .githooks
 ```
 
 Then open the folder in Claude Code and say: read `CLAUDE.md` and run setup.

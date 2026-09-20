@@ -7,7 +7,11 @@ cd "$(git rev-parse --show-toplevel)"
 LINK_CHECK_SKIP=".git core" ./core/scripts/link-check.sh || exit 1
 STYLE_CHECK_SKIP="core/ .claude/skills/" ./core/scripts/style-check.sh || exit 1
 ./core/scripts/leak-check.sh || exit 1
-python3 site/build.py --check || exit 1
+# only in the kit's own repo; an ICM made from it has no site/
+[ ! -f site/build.py ] || python3 site/build.py --check || exit 1
+
+# The owner's own checks. They live outside core/, so an update never wipes them.
+for c in _config/checks/*.sh; do [ -x "$c" ] && { "$c" || exit 1; }; done
 
 # The graph page is rebuilt when a record changes. It never blocks a commit, and it is not committed:
 # it holds the whole text of the repo.
