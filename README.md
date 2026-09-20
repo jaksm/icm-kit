@@ -71,7 +71,8 @@ Other providers, and which subscription makes sense: [docs/providers.md](docs/pr
 
 ## Start
 
-The same in one page, with the prompt ready to copy: `site/index.html` (open it in a browser).
+The same in one page, with the prompt ready to copy: the landing page, built from this repo's
+`setup-prompt.md` and `docs/providers.md` by [icm-kit-site](https://github.com/jaksm/icm-kit-site).
 
 Paste the prompt from [setup-prompt.md](setup-prompt.md) into your agent. It asks a few questions
 to learn how technical you are and how you like things explained, checks what is installed, clones
@@ -90,7 +91,7 @@ encrypted remote are steps 05 and 06):
 
 ```bash
 git clone https://github.com/jaksm/icm-kit my-icm && cd my-icm
-rm -rf .git site docs CONTRIBUTING.md && git init -b main && git config core.hooksPath .githooks
+rm -rf .git docs CONTRIBUTING.md && git init -b main && git config core.hooksPath .githooks
 ```
 
 Then open the folder in Claude Code and say: read `CLAUDE.md` and run setup.

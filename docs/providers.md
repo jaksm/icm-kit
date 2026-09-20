@@ -2,7 +2,7 @@
 
 icm-kit is provider agnostic by design: everything specific to a harness lives in
 `core/adapters/<name>/`. **One adapter exists today, for Claude Code.** This record is the canonical
-source for the landing page (`site/build.py` copies the marked blocks), so a fact is changed here and
+source for the landing page (icm-kit-site's `build.py` copies the marked blocks), so a fact is changed here and
 nowhere else.
 
 No prices are written here on purpose. They change, and a stale price is worse than a link.
