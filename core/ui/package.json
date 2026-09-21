@@ -1,0 +1,14 @@
+{
+  "name": "icm-ui",
+  "version": "0.6.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./dist/icm.js",
+    "./css": "./dist/icm.css",
+    "./themes/*": "./themes/*",
+    "./tokens/*": "./tokens/*",
+    "./icons/*": "./icons/*",
+    "./schema.json": "./schema.json"
+  }
+}
