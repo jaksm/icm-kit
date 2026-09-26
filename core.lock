@@ -1,4 +1,4 @@
-version 0.8.0
+version 0.8.1
 6cf60f726a7c58605564a4f473f8730b08b722b045fa580fbc2dfecb97c2d1bd core/RECIPES.md
 bfee78cdfc8542eee3b9b99c494c3fd8d32b7a4f6e2e6b7cb8c2647a58392590 core/adapters/README.md
 5262ecaaa6f0f6c9f4388bf088ee9069522028140cbb1e12f336937fa8e43481 core/adapters/antigravity/README.md
@@ -50,4 +50,4 @@ ae5bdecd2dab71c0aacd6d73b7e8ad41d356799deb28398cdf13b8177ad60edf core/skills/set
 f6d16324ff6e282740f4af8f7703764242ca6f475ae483944ac991fef42986e2 core/skills/setup/steps/14-audit.md
 1338ed1c1bc2510ac08b17c1af982149c6558c6e0b9c262a2fb40e9874f28e58 core/workflows/graph/scripts/build-graph-page.py
 4950ceb7d8f94577c9e89c1780dcfc5c0247d78fb0c5c03cb86f56af77459239 core/workflows/graph/setup.md
-5991c3db83e5db834605d7a7f5694ffebc0a692878ca71a2c4ba576a653b8ff2 core/workflows/graph/template/graph-template.html
+bffdeb291dcc0df27af412f4b4b0c0bc0c81ac9fd4d24b9091390c756a5e9d5d core/workflows/graph/template/graph-template.html
